@@ -35,31 +35,30 @@ public class MainActivity extends AppCompatActivity {
         male = findViewById(R.id.male);
         female = findViewById(R.id.female);
 
-        btnCalcular.setOnClickListener(v -> {
-            try {
-                int edad = Integer.parseInt(ageInput.getText().toString());
-                int pies = Integer.parseInt(feetInput.getText().toString());
-                int pulgadas = Integer.parseInt(inchesInput.getText().toString());
-                float pesoKg = Float.parseFloat(heightInput.getText().toString());
+        btnCalcular.setOnClickListener(v -> calcular());
+        
+    }
+    public void calcular(){
+        try {
+            int edad = Integer.parseInt(ageInput.getText().toString());
+            int pies = Integer.parseInt(feetInput.getText().toString());
+            int pulgadas = Integer.parseInt(inchesInput.getText().toString());
+            float pesoKg = Float.parseFloat(heightInput.getText().toString());
 
-                int totalPulgadas = (pies * 12) + pulgadas;
-                double alturaMetros = totalPulgadas * 0.0254;
+            int totalPulgadas = (pies * 12) + pulgadas;
+            double alturaMetros = totalPulgadas * 0.0254;
 
-                double bim = pesoKg / (alturaMetros * alturaMetros);
+            double bim = pesoKg / (alturaMetros * alturaMetros);
 
-                if(male.isChecked()){
-                    sexua = "Gizona";
-                } else if (female.isChecked()) {
-                    sexua = "Emakumea";
-                }
-                resultInput.setText("\n \n Sexua: " + sexua + "\n \n Adina: " + edad +"\n \n Zure BIM da: " + String.format("%.2f", bim) );
-
-            } catch (Exception e) {
-                resultInput.setText("Datu guztiak jarri");
+            if(male.isChecked()){
+                sexua = "Gizona";
+            } else if (female.isChecked()) {
+                sexua = "Emakumea";
             }
+            resultInput.setText("\n \n Sexua: " + sexua + "\n \n Adina: " + edad +"\n \n Zure BIM da: " + String.format("%.2f", bim) );
 
-
-
-        });
+        } catch (Exception e) {
+            resultInput.setText("Datu guztiak jarri");
+        }
     }
 }
