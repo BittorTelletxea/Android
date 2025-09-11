@@ -45,14 +45,14 @@ public class MainActivity extends AppCompatActivity {
                 int totalPulgadas = (pies * 12) + pulgadas;
                 double alturaMetros = totalPulgadas * 0.0254;
 
-                double bmi = pesoKg / (alturaMetros * alturaMetros);
+                double bim = pesoKg / (alturaMetros * alturaMetros);
 
                 if(male.isChecked()){
                     sexua = "Gizona";
                 } else if (female.isChecked()) {
                     sexua = "Emakumea";
                 }
-                resultInput.setText("\n \n Sexua: " + sexua + "\n \n Adina: " + edad +"\n \n Zure BMI da: " + String.format("%.2f", bmi) );
+                resultInput.setText("\n \n Sexua: " + sexua + "\n \n Adina: " + edad +"\n \n Zure BIM da: " + String.format("%.2f", bim) );
 
             } catch (Exception e) {
                 resultInput.setText("Datu guztiak jarri");
