@@ -3,6 +3,7 @@ package com.example.bim_calculator;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
     private EditText ageInput, feetInput, inchesInput, heightInput;
     private TextView resultInput;
+    private RadioButton male, female;
+    private String sexua;
     private Button btnCalcular;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,18 +32,33 @@ public class MainActivity extends AppCompatActivity {
         resultInput = findViewById(R.id.result);
         btnCalcular = findViewById(R.id.calcular);
 
+        male = findViewById(R.id.male);
+        female = findViewById(R.id.female);
+
         btnCalcular.setOnClickListener(v -> {
-            int edad = Integer.parseInt(ageInput.getText().toString());
-            int pies = Integer.parseInt(feetInput.getText().toString());
-            int pulgadas = Integer.parseInt(inchesInput.getText().toString());
-            float pesoKg = Float.parseFloat(heightInput.getText().toString());
+            try {
+                int edad = Integer.parseInt(ageInput.getText().toString());
+                int pies = Integer.parseInt(feetInput.getText().toString());
+                int pulgadas = Integer.parseInt(inchesInput.getText().toString());
+                float pesoKg = Float.parseFloat(heightInput.getText().toString());
 
-            int totalPulgadas = (pies * 12) + pulgadas;
-            double alturaMetros = totalPulgadas * 0.0254;
+                int totalPulgadas = (pies * 12) + pulgadas;
+                double alturaMetros = totalPulgadas * 0.0254;
 
-            double bmi = pesoKg / (alturaMetros * alturaMetros);
+                double bmi = pesoKg / (alturaMetros * alturaMetros);
 
-            resultInput.setText("Tu BMI es: " + String.format("%.2f", bmi));
+                if(male.isChecked()){
+                    sexua = "Gizona";
+                } else if (female.isChecked()) {
+                    sexua = "Emakumea";
+                }
+                resultInput.setText("\n \n Sexua: " + sexua + "\n \n Adina: " + edad +"\n \n Zure BMI da: " + String.format("%.2f", bmi) );
+
+            } catch (Exception e) {
+                resultInput.setText("Datu guztiak jarri");
+            }
+
+
 
         });
     }
