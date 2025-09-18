@@ -12,6 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.Objects;
+
 public class StarterActivity extends AppCompatActivity {
 
 
@@ -19,6 +21,8 @@ public class StarterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.startes_activity);
+
+
 
         ListView lista = findViewById(R.id.listaStarters);
         Plato[] platos = {
