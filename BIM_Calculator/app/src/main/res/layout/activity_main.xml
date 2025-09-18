@@ -8,11 +8,13 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="1794dp"
+        android:layout_height="2722dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-294dp"
+        tools:layout_editor_absoluteY="-1221dp">
 
         <ImageView
             android:id="@+id/imageView"
@@ -138,8 +140,7 @@
             android:id="@+id/result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
     </LinearLayout>
 

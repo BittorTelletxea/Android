@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         female = findViewById(R.id.female);
 
         btnCalcular.setOnClickListener(v -> calcular());
-        
+
     }
     public void calcular(){
         try {
