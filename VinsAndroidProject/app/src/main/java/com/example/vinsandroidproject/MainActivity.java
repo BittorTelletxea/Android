@@ -20,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
         Project[] projects = {
                 new Project("The App Title", "This will be our description of the project", 5),
-                new Project("The App Title", "This will be our description of the project", 5),
-                new Project("The App Title", "This will be our description of the project", 5),
-                new Project("The App Title", "This will be our description of the project", 5),
+                new Project("The App Title2", "This will be our description of the project2", 5),
+                new Project("The App Title3", "This will be our description of the project3", 5),
+                new Project("The App Title4", "This will be our description of the project4", 5),
 
         };
 
