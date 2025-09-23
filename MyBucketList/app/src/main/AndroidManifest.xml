@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBucketList">
         <activity
+            android:name=".PlacesToGoActivity"
+            android:exported="false"
+            android:label="Places To Go"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.MyBucketList" />
+        <activity
+            android:name=".ThingsToDoActivity"
+            android:exported="false"
+            android:label="Things To Do"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.MyBucketList" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
