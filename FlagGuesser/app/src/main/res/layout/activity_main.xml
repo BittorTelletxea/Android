@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/gradient_background"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"
+            android:text="UserName"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ec"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            >
+
+        <ImageView
+            android:id="@+id/bandera"
+            android:layout_width="300dp"
+            android:layout_height="200dp"/>
+
+        <Button
+            android:id="@+id/opcion1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="opcion1"/>
+        <Button
+            android:id="@+id/opcion2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="opcion2"/>
+        <Button
+            android:id="@+id/opcion3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="opcion3"/>
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:id="@+id/footer"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:elevation="8dp"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="8dp"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:id="@+id/btn_jugar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/play"
+                android:scaleType="centerInside"
+                android:contentDescription="Jugar"
+                android:layout_marginHorizontal="24dp" />
+
+            <ImageView
+                android:id="@+id/btn_ranking"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ranking"
+                android:scaleType="centerInside"
+                android:contentDescription="Ranking"
+                android:layout_marginHorizontal="24dp" />
+
+            <ImageView
+                android:id="@+id/btn_perfil"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/perfil"
+                android:scaleType="centerInside"
+                android:contentDescription="Perfil"
+                android:layout_marginHorizontal="24dp" />
+
+        </LinearLayout>
+
+
+</RelativeLayout>
