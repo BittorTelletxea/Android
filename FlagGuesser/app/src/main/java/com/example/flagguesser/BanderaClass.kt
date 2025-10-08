@@ -1,6 +1,6 @@
 package com.example.flagguesser
 
-data class Bandera(
+data class BanderaClass(
     val nombre: String,
     val imagenResId: Int
 )

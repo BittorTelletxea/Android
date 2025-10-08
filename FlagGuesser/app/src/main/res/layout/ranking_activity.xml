@@ -50,69 +50,9 @@
 
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="right">
-
-        <TextView
-            android:id="@+id/tvRacha"
-            android:textAlignment="center"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:padding="5dp"
-            android:textSize="15sp"
-            android:layout_marginRight="20dp"
-            android:background="@color/white"
-            android:layout_marginTop="110dp"
-            android:layout_marginBottom="16dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="170dp"
-
-        >
-
-        <ImageView
-
-            android:id="@+id/bandera"
-            android:layout_width="300dp"
-            android:layout_height="200dp"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_marginTop="10dp"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:elevation="8dp"
-            android:id="@+id/opcion1"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:elevation="8dp"
-            android:layout_marginTop="10dp"
-
-            android:id="@+id/opcion2"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/white"
-            android:elevation="8dp"
-            android:id="@+id/opcion3"/>
 
 
 
-
-    </LinearLayout>
 
 
 
@@ -135,7 +75,7 @@
             android:id="@+id/btn_jugar"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/play"
+            android:src="@drawable/playoff"
             android:scaleType="centerInside"
             android:contentDescription="Jugar"
             android:layout_marginHorizontal="24dp" />
@@ -144,7 +84,7 @@
             android:id="@+id/btn_ranking"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/rankingoff"
+            android:src="@drawable/ranking"
             android:scaleType="centerInside"
             android:contentDescription="Ranking"
             android:layout_marginHorizontal="24dp" />
