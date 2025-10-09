@@ -6,8 +6,8 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Locale
+import com.google.firebase.firestore.FirebaseFirestore
 
-data class Bandera(val nombre: String, val imagenResId: Int)
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,9 +18,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rankingBtn: ImageView
     val paisCodigo = Locale.getDefault().country
 
+    val db = FirebaseFirestore.getInstance();
+
     private lateinit var username: TextView
 
     private lateinit var banderaCorrecta: BanderaClass
+    private lateinit var recordRachaText: TextView
 
     val listaBanderas = listOf(
         BanderaClass("Argentina", R.drawable.ar),
@@ -86,7 +89,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private lateinit var tvRacha: TextView
-    private var racha = 0 // Contador de racha
+    private var racha: Int = 0 // Contador de racha
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +102,7 @@ class MainActivity : AppCompatActivity() {
         tvRacha = findViewById(R.id.tvRacha)
         username = findViewById(R.id.username)
         rankingBtn = findViewById(R.id.btn_ranking)
+        recordRachaText = findViewById(R.id.text_view_record)
 
         rankingBtn.setOnClickListener { cambiarRanking() }
 
@@ -118,6 +122,29 @@ class MainActivity : AppCompatActivity() {
         imgUserFlag.setImageResource(banderaResId)
 
         mostrarNuevaBandera()
+        añadirDatos()
+        aldatuRecord()
+    }
+
+    public fun añadirDatos(){
+        val nombre = db.collection("users").document("1").get()
+        nombre.addOnSuccessListener { document ->
+            if(document.exists()){
+               val nombreUser = document.get("nombre").toString()
+                username.text = "${nombreUser}"
+
+
+            }
+        }
+    }
+    private fun aldatuRecord(){
+        val user = db.collection("users").document("1")
+        user.get().addOnSuccessListener { document ->
+            if(document.exists()){
+                var recordRachaBerria = document.get("racha").toString();
+                recordRachaText.text = "${recordRachaBerria}";
+            }
+        }
     }
 
     private fun aldatuUser() {
@@ -146,8 +173,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun mostrarNuevaBandera() {
-        tvRacha.text = "$racha"
-
         // Lista de botones
         val botones = listOf(btnOpcion1, btnOpcion2, btnOpcion3)
 
@@ -168,6 +193,9 @@ class MainActivity : AppCompatActivity() {
         // Mostrar la bandera
         imageBandera.setImageResource(banderaCorrecta.imagenResId)
 
+        // Actualizar racha en pantalla
+        tvRacha.text = "$racha"
+
         // Asignar texto y click listeners
         botones.forEachIndexed { index, boton ->
             boton.text = opciones[index].nombre
@@ -176,17 +204,40 @@ class MainActivity : AppCompatActivity() {
                 botones.forEach { it.isEnabled = false }
 
                 if (opciones[index] == banderaCorrecta) {
+                    // Acertó
                     boton.setBackgroundColor(getColor(R.color.green))
                     racha++
+                    tvRacha.text = "$racha"
+
                 } else {
+                    // Falló
                     boton.setBackgroundColor(getColor(R.color.red))
                     val correctoIndex = opciones.indexOf(banderaCorrecta)
                     botones[correctoIndex].setBackgroundColor(getColor(R.color.green))
 
-                    racha = 0
-                }
+                    val usuario = db.collection("users").document("1")
+                    usuario.get().addOnSuccessListener { document ->
+                        if (document.exists()) {
+                            val rachaUser = (document.get("racha") as? Number)?.toInt() ?: 0
 
-                tvRacha.text = "$racha"
+                            if (racha > rachaUser) {
+
+                                usuario.update("racha", racha)
+                                    .addOnSuccessListener {
+                                        Toast.makeText(this, "¡Has superado tu récord!", Toast.LENGTH_SHORT).show()
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(this, "Error al actualizar la racha", Toast.LENGTH_SHORT).show()
+                                    }
+                                aldatuRecord();
+                            }
+                        }
+
+                        // Reiniciamos la racha **dentro del listener de Firebase**
+                        racha = 0
+                        tvRacha.text = "$racha"
+                    }
+                }
 
                 // Esperar un segundo antes de la siguiente bandera
                 boton.postDelayed({
@@ -195,6 +246,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun cambiarRanking(){
         val rankingIntent: Intent = Intent(this@MainActivity, RankingActivity::class.java)
         startActivity(rankingIntent)

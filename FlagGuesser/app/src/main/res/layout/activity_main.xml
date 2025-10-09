@@ -110,7 +110,27 @@
             android:id="@+id/opcion3"/>
 
 
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_marginTop="30dp"
+            android:gravity="center">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Record"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:id="@+id/text_view_record"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textAlignment="center"/>
+        </LinearLayout>
 
     </LinearLayout>
 

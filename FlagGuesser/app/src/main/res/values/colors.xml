@@ -5,5 +5,7 @@
     <color name="green">#4CAF50</color>
     <color name="red">#F44336</color>
     <color name="transparent">#00000000</color>
+    <color name="beige">#F5F5DC</color>
+    <color name="blanco_suave">#FFFFFF</color>
 
 </resources>

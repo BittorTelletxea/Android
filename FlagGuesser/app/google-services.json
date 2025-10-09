@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "814548607063",
+    "project_id": "flagguesser-3faf8",
+    "storage_bucket": "flagguesser-3faf8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814548607063:android:e975889cc2088a0d054312",
+        "android_client_info": {
+          "package_name": "com.example.flagguesser"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmKJP8snlub9ImicPrj7_fsOIjIeyEEQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

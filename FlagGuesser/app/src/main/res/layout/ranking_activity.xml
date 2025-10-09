@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,6 +51,125 @@
 
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="360dp"
+            android:layout_height="500dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            android:background="@color/blanco_suave"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!-- Título -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Top Global"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:padding="12dp"
+                    android:background="@color/beige"
+                    android:layout_marginBottom="12dp"
+                    android:clipToOutline="true"
+                    android:elevation="4dp"
+                    android:layout_gravity="center"/>
+
+                <!-- Encabezado de la lista -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="45dp"
+                    android:paddingBottom="4dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Nombre"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="Racha"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pais"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="end"/>
+                </LinearLayout>
+
+                <!-- Listado de rachas -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ListView
+                        android:id="@+id/listRachasNombre"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:divider="@color/beige"
+                        android:dividerHeight="1dp"
+                        android:background="@color/blanco_suave"
+                        android:padding="8dp"/>
+
+                    <ListView
+                        android:id="@+id/listRachasRacha"
+                        android:layout_width="70dp"
+                        android:textAlignment="center"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:divider="@color/beige"
+                        android:dividerHeight="1dp"
+                        android:background="@color/blanco_suave"
+                        android:padding="8dp"/>
+                    <ListView
+                        android:id="@+id/listRachasPais"
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:divider="@color/beige"
+                        android:dividerHeight="1dp"
+                        android:background="@color/blanco_suave"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+</LinearLayout>
 
 
 
