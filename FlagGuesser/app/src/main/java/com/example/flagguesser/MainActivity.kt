@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance();
 
     private lateinit var username: TextView
+    private lateinit var userRegistrado: String
 
     private lateinit var banderaCorrecta: BanderaClass
     private lateinit var recordRachaText: TextView
@@ -106,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 
         rankingBtn.setOnClickListener { cambiarRanking() }
 
-        username.setOnClickListener { aldatuUser() }
+        username.setOnClickListener { hasiSaioa() }
 
         //erabiltzailearen herrialdearen bandera jarri
         val banderaResId = when (paisCodigo.uppercase()) {
@@ -122,11 +123,10 @@ class MainActivity : AppCompatActivity() {
         imgUserFlag.setImageResource(banderaResId)
 
         mostrarNuevaBandera()
-        añadirDatos()
-        aldatuRecord()
+        //aldatuRecord()
     }
 
-    public fun añadirDatos(){
+    /*private fun añadirDatos(){
         val nombre = db.collection("users").document("1").get()
         nombre.addOnSuccessListener { document ->
             if(document.exists()){
@@ -136,29 +136,45 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-    }
-    private fun aldatuRecord(){
-        val user = db.collection("users").document("1")
-        user.get().addOnSuccessListener { document ->
-            if(document.exists()){
-                var recordRachaBerria = document.get("racha").toString();
-                recordRachaText.text = "${recordRachaBerria}";
-            }
-        }
-    }
-
-    private fun aldatuUser() {
+    }*/
+    private fun hasiSaioa() {
+        var izenaAurkitua = false;
         val input = EditText(this)
         input.setText(username.text.toString())
 
-        // Crear el AlertDialog
         val dialog = AlertDialog.Builder(this)
             .setTitle("Erabiltzaile izena aldatu")
             .setView(input)
             .setPositiveButton("Onartu") { _, _ ->
                 val nuevoNombre = input.text.toString().trim()
                 if (nuevoNombre.isNotEmpty()) {
-                    username.text = nuevoNombre
+                    db.collection("users").get().addOnSuccessListener { documentSnapshots ->
+                        if (!documentSnapshots.isEmpty) {
+                            for (document in documentSnapshots.documents) {
+                                if (document.getString("nombre").equals(nuevoNombre.toLowerCase(
+                                        Locale.ROOT))) {
+                                    username.text = nuevoNombre
+                                    izenaAurkitua = true
+                                }
+                            }
+                            if (!izenaAurkitua) {
+                                val usuarioRegistered = hashMapOf(
+                                    "nombre" to nuevoNombre.toLowerCase(Locale.ROOT),
+                                    "pais" to paisCodigo,
+                                    "racha" to 0
+                                )
+                                userRegistrado = nuevoNombre;
+                                username.text = nuevoNombre
+                                db.collection("users").add(usuarioRegistered).addOnSuccessListener {
+                                    Toast.makeText(
+                                        this, "Erabiltzaile " + nuevoNombre + " erregistratua",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                }
+                            }
+
+                        }
+                    }
                     Toast.makeText(this, "Izena aldatu da, $nuevoNombre", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "Ez duzu izenik jarri", Toast.LENGTH_SHORT).show()
@@ -171,6 +187,33 @@ class MainActivity : AppCompatActivity() {
 
         dialog.show()
     }
+
+    /*private fun aldatuRecord() {
+        var rachaEncontrada = false
+
+        var usuario = db.collection("users")
+        val indice = usuario.get().addOnSuccessListener { query ->
+            if (!query.isEmpty) {
+                for (document in query.documents) {
+                    if (document.getString("nombre").equals(userRegistrado)) {
+                        val rachaUser = (document.get("racha") as? Number)?.toInt() ?: 0
+                        recordRachaText.text = rachaUser.toString()
+                        rachaEncontrada = true
+                        break
+                    }
+                }
+                if (!rachaEncontrada){
+                    recordRachaText.text = "-"
+                }
+            }
+
+
+
+            }
+    }*/
+
+
+
 
     private fun mostrarNuevaBandera() {
         // Lista de botones
@@ -215,21 +258,23 @@ class MainActivity : AppCompatActivity() {
                     val correctoIndex = opciones.indexOf(banderaCorrecta)
                     botones[correctoIndex].setBackgroundColor(getColor(R.color.green))
 
-                    val usuario = db.collection("users").document("1")
-                    usuario.get().addOnSuccessListener { document ->
-                        if (document.exists()) {
-                            val rachaUser = (document.get("racha") as? Number)?.toInt() ?: 0
-
-                            if (racha > rachaUser) {
-
-                                usuario.update("racha", racha)
-                                    .addOnSuccessListener {
-                                        Toast.makeText(this, "¡Has superado tu récord!", Toast.LENGTH_SHORT).show()
+                    val usuario = db.collection("users")
+                    val indice = usuario.get().addOnSuccessListener { query ->
+                        if(!query.isEmpty){
+                            for(document in query.documents){
+                                if(document.getString("nombre").equals(userRegistrado)){
+                                    val rachaUser = (document.get("racha") as? Number)?.toInt() ?: 0
+                                        if(rachaUser < racha){
+                                            db.collection("users").document(document.id).update("racha", racha).addOnSuccessListener {
+                                                Toast.makeText(
+                                                    this,
+                                                    "Racha eguneratua",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                //aldatuRecord()
+                                            }
                                     }
-                                    .addOnFailureListener {
-                                        Toast.makeText(this, "Error al actualizar la racha", Toast.LENGTH_SHORT).show()
-                                    }
-                                aldatuRecord();
+                                }
                             }
                         }
 

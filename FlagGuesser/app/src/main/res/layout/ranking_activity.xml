@@ -97,9 +97,9 @@
                     android:paddingBottom="4dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
+
                         android:text="Nombre"
                         android:textStyle="bold"
                         android:textColor="@color/black"/>
@@ -108,6 +108,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
+
                         android:text="Racha"
                         android:textStyle="bold"
                         android:textColor="@color/black"
@@ -127,10 +128,11 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="15dp"
                     android:orientation="horizontal">
                     <ListView
                         android:id="@+id/listRachasNombre"
-                        android:layout_width="50dp"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:divider="@color/beige"
@@ -150,7 +152,7 @@
                         android:padding="8dp"/>
                     <ListView
                         android:id="@+id/listRachasPais"
-                        android:layout_width="1dp"
+                        android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:divider="@color/beige"
