@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance();
 
     private lateinit var username: TextView
-    private lateinit var userRegistrado: String
+    private var userRegistrado: String? = null
 
     private lateinit var banderaCorrecta: BanderaClass
     private lateinit var recordRachaText: TextView
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
         imgUserFlag.setImageResource(banderaResId)
 
         mostrarNuevaBandera()
-        //aldatuRecord()
+        aldatuRecord()
     }
 
     /*private fun añadirDatos(){
@@ -137,13 +137,38 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }*/
+    fun aldatuRecord() {
+        var rachaEncontrada = false
+
+        db.collection("users").get()
+            .addOnSuccessListener { query ->
+                if (!query.isEmpty) {
+                    for (document in query.documents) {
+
+                        if (!userRegistrado.isNullOrBlank() ) {
+                            if (document.getString("nombre").equals(userRegistrado)) {
+                                val rachaUser = (document.get("racha") as? Number)?.toInt() ?: 0
+                                recordRachaText.text = "$rachaUser"
+                                rachaEncontrada = true
+                                break
+                            }
+                        } else {
+                            recordRachaText.text = "Saioa hasi"
+                        }
+                    }
+                    if (!rachaEncontrada) {
+                        recordRachaText.text = "Saioa hasi"
+                    }
+                }
+            }
+
+    }
     private fun hasiSaioa() {
         var izenaAurkitua = false;
         val input = EditText(this)
-        input.setText(username.text.toString())
 
         val dialog = AlertDialog.Builder(this)
-            .setTitle("Erabiltzaile izena aldatu")
+            .setTitle("Saioa Hasi")
             .setView(input)
             .setPositiveButton("Onartu") { _, _ ->
                 val nuevoNombre = input.text.toString().trim()
@@ -154,6 +179,8 @@ class MainActivity : AppCompatActivity() {
                                 if (document.getString("nombre").equals(nuevoNombre.toLowerCase(
                                         Locale.ROOT))) {
                                     username.text = nuevoNombre
+                                    userRegistrado = nuevoNombre
+                                    aldatuRecord()
                                     izenaAurkitua = true
                                 }
                             }
@@ -163,6 +190,7 @@ class MainActivity : AppCompatActivity() {
                                     "pais" to paisCodigo,
                                     "racha" to 0
                                 )
+
                                 userRegistrado = nuevoNombre;
                                 username.text = nuevoNombre
                                 db.collection("users").add(usuarioRegistered).addOnSuccessListener {
@@ -171,11 +199,12 @@ class MainActivity : AppCompatActivity() {
                                         Toast.LENGTH_SHORT
                                     )
                                 }
+                                aldatuRecord()
                             }
 
                         }
                     }
-                    Toast.makeText(this, "Izena aldatu da, $nuevoNombre", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Saioa hasi da", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "Ez duzu izenik jarri", Toast.LENGTH_SHORT).show()
                 }
@@ -188,29 +217,7 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    /*private fun aldatuRecord() {
-        var rachaEncontrada = false
 
-        var usuario = db.collection("users")
-        val indice = usuario.get().addOnSuccessListener { query ->
-            if (!query.isEmpty) {
-                for (document in query.documents) {
-                    if (document.getString("nombre").equals(userRegistrado)) {
-                        val rachaUser = (document.get("racha") as? Number)?.toInt() ?: 0
-                        recordRachaText.text = rachaUser.toString()
-                        rachaEncontrada = true
-                        break
-                    }
-                }
-                if (!rachaEncontrada){
-                    recordRachaText.text = "-"
-                }
-            }
-
-
-
-            }
-    }*/
 
 
 
@@ -271,7 +278,7 @@ class MainActivity : AppCompatActivity() {
                                                     "Racha eguneratua",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
-                                                //aldatuRecord()
+                                                aldatuRecord()
                                             }
                                     }
                                 }
