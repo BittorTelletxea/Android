@@ -15,6 +15,14 @@
             android:label="Ranking"
             android:parentActivityName=".MainActivity"
             />
+        <activity android:name=".LogInActivity"
+            android:label="LogIn"
+            android:parentActivityName=".MainActivity"
+            />
+        <activity android:name=".RegisterActivity"
+            android:label="Register"
+            android:parentActivityName=".MainActivity"
+            />
         <activity
             android:name=".MainActivity"
             android:exported="true">

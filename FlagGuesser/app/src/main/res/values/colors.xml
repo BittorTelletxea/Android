@@ -7,5 +7,6 @@
     <color name="transparent">#00000000</color>
     <color name="beige">#F5F5DC</color>
     <color name="blanco_suave">#FFFFFF</color>
+    <color name="linkColor">#00BCD4</color>
 
 </resources>
