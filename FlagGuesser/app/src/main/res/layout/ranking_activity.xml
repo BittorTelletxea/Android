@@ -28,8 +28,10 @@
                 android:layout_width="wrap_content"
                 android:text="Saioa hasi"
                 android:layout_height="25dp"
+                android:textColor="@color/black"
                 android:background="@color/white"
                 android:elevation="8dp"
+
                 android:id="@+id/username"/>
             <ImageView
                 android:id="@+id/logoutImage"
@@ -71,8 +73,9 @@
             android:layout_width="360dp"
             android:layout_height="500dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="8dp"
-            android:background="@color/blanco_suave"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@color/blanco_suave"
             android:padding="16dp">
 
             <LinearLayout
@@ -137,6 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="15dp"
+
                     android:orientation="horizontal">
                     <ListView
                         android:id="@+id/listRachasNombre"
@@ -164,6 +168,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:divider="@color/beige"
+
                         android:dividerHeight="1dp"
                         android:background="@color/blanco_suave"
                         android:padding="8dp"/>

@@ -26,6 +26,8 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
                 android:text="Saioa hasi"
+                android:textColor="@color/black"
+
                 android:layout_height="25dp"
                 android:background="@color/white"
                 android:elevation="8dp"
@@ -100,12 +102,14 @@
             android:layout_marginTop="10dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:background="@color/white"
             android:elevation="8dp"
             android:id="@+id/opcion1"/>
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:background="@color/white"
             android:elevation="8dp"
             android:layout_marginTop="10dp"
@@ -116,6 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/white"
+            android:textColor="@color/black"
             android:elevation="8dp"
             android:id="@+id/opcion3"/>
 
@@ -132,6 +137,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Record"
+                android:textColor="@color/black"
+
                 android:textAlignment="center"/>
 
             <TextView

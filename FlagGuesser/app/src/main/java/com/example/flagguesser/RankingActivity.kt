@@ -159,9 +159,9 @@ class RankingActivity : AppCompatActivity() {
                     }
                 }
 
-                val adapterNombre = ArrayAdapter(this, android.R.layout.simple_list_item_1, listaStringsNombre)
-                val adapterPais = ArrayAdapter(this, android.R.layout.simple_list_item_1, listaStringsPais)
-                val adapterRacha = ArrayAdapter(this, android.R.layout.simple_list_item_1, listaStringsRacha)
+                val adapterNombre = ArrayAdapter(this, R.layout.item_lista, listaStringsNombre)
+                val adapterPais = ArrayAdapter(this, R.layout.item_lista, listaStringsPais)
+                val adapterRacha = ArrayAdapter(this, R.layout.item_lista, listaStringsRacha)
 
                 listaRecordNombre.adapter = adapterNombre
                 listaRecordPais.adapter = adapterPais

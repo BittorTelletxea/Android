@@ -1,5 +1,6 @@
 package com.example.flagguesser
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -109,12 +110,10 @@ class MainActivity : AppCompatActivity() {
         recordRachaText = findViewById(R.id.text_view_record)
         logutImg = findViewById(R.id.logoutImage)
 
-        rankingBtn.setOnClickListener { cambiarRanking() }
 
-        username.setOnClickListener { hasiSaioa() }
 
         val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-        val userRegistrado = prefs.getString("userRegistrado", null)
+        userRegistrado = prefs.getString("userRegistrado", null)
 
         if (userRegistrado != null) {
             username.text = userRegistrado
@@ -125,6 +124,10 @@ class MainActivity : AppCompatActivity() {
             logutImg.visibility = View.GONE;
 
         }
+
+        rankingBtn.setOnClickListener { cambiarRanking() }
+
+        username.setOnClickListener { hasiSaioa() }
 
 
 
@@ -228,16 +231,20 @@ class MainActivity : AppCompatActivity() {
                     botones[correctoIndex].setBackgroundColor(getColor(R.color.green))
 
                     val usuario = db.collection("users")
-                    val indice = usuario.get().addOnSuccessListener { query ->
+                    usuario.get().addOnSuccessListener { query ->
+
                         if(!query.isEmpty){
+
                             for(document in query.documents){
                                 if(document.getString("nombre").equals(userRegistrado)){
+
                                     val rachaUser = (document.get("racha") as? Number)?.toInt() ?: 0
+
                                         if(rachaUser < racha){
                                             db.collection("users").document(document.id).update("racha", racha).addOnSuccessListener {
                                                 Toast.makeText(
                                                     this,
-                                                    "Racha eguneratua",
+                                                    "Record eguneratua",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                                 aldatuRecord()
