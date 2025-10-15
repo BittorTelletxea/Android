@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Fondo -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/fondomapa"
+        android:contentDescription="fondo" />
+    <ImageView
+        android:id="@+id/atzeraBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/flecha" />
+
+    <!-- Contenedor central -->
+    <LinearLayout
+        android:id="@+id/loginCard"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:layout_centerInParent="true"
+        android:elevation="8dp"
+        android:clipToOutline="true"
+        android:layout_margin="16dp">
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ongi Etorri"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Usuario -->
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Erabiltzailea"
+            android:padding="14dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="#AAFFFFFF"
+            android:background="@drawable/rounded_edittext_transparent"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Contraseña -->
+        <EditText
+            android:id="@+id/contraseña"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Pasahitza"
+            android:inputType="textPassword"
+            android:padding="14dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="#AAFFFFFF"
+            android:background="@drawable/rounded_edittext_transparent"
+            android:layout_marginBottom="24dp"/>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Saioa Hasi"
+            android:backgroundTint="#FF6200EE"
+            android:textColor="@android:color/white"
+            android:padding="14dp"
+            android:textStyle="bold"
+            android:elevation="4dp"/>
+
+        <TextView
+            android:id="@+id/erregitratuLink"
+            android:layout_width="match_parent"
+            android:textStyle="italic"
+            android:layout_height="wrap_content"
+            android:text="Ez duzu konturik? Erregistratu"
+            android:textColor="@color/linkColor"
+            android:textAlignment="center"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/errorea"
+            android:layout_width="match_parent"
+            android:textStyle="italic"
+
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textAlignment="center"
+            android:gravity="center"/>
+    </LinearLayout>
+
+</RelativeLayout>

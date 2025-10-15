@@ -1,10 +1,12 @@
 package com.example.flagguesser
 
+import android.view.View
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 import java.util.Locale
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -16,15 +18,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnOpcion2: Button
     private lateinit var btnOpcion3: Button
     private lateinit var rankingBtn: ImageView
-    val paisCodigo = Locale.getDefault().country
+    private val paisCodigo = Locale.getDefault().country
 
-    val db = FirebaseFirestore.getInstance();
-
+    private val db = FirebaseFirestore.getInstance();
     private lateinit var username: TextView
     private var userRegistrado: String? = null
-
     private lateinit var banderaCorrecta: BanderaClass
     private lateinit var recordRachaText: TextView
+    private lateinit var logutImg: ImageView
 
     val listaBanderas = listOf(
         BanderaClass("Argentina", R.drawable.ar),
@@ -93,6 +94,8 @@ class MainActivity : AppCompatActivity() {
     private var racha: Int = 0 // Contador de racha
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -104,10 +107,26 @@ class MainActivity : AppCompatActivity() {
         username = findViewById(R.id.username)
         rankingBtn = findViewById(R.id.btn_ranking)
         recordRachaText = findViewById(R.id.text_view_record)
+        logutImg = findViewById(R.id.logoutImage)
 
         rankingBtn.setOnClickListener { cambiarRanking() }
 
         username.setOnClickListener { hasiSaioa() }
+
+        val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val userRegistrado = prefs.getString("userRegistrado", null)
+
+        if (userRegistrado != null) {
+            username.text = userRegistrado
+            logutImg.visibility = View.VISIBLE;
+
+        } else {
+            username.text = "Saioa Hasi"
+            logutImg.visibility = View.GONE;
+
+        }
+
+
 
         //erabiltzailearen herrialdearen bandera jarri
         val banderaResId = when (paisCodigo.uppercase()) {
@@ -122,23 +141,27 @@ class MainActivity : AppCompatActivity() {
         val imgUserFlag = findViewById<ImageView>(R.id.usuariobandera)
         imgUserFlag.setImageResource(banderaResId)
 
+        logutImg.setOnClickListener { logout() }
+
         mostrarNuevaBandera()
         aldatuRecord()
     }
 
-    /*private fun añadirDatos(){
-        val nombre = db.collection("users").document("1").get()
-        nombre.addOnSuccessListener { document ->
-            if(document.exists()){
-               val nombreUser = document.get("nombre").toString()
-                username.text = "${nombreUser}"
+    private fun logout(){
+        val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        prefs.edit().remove("userRegistrado").apply()
+        userRegistrado = null
+        username.text = "Saioa Hasi"
+        logutImg.visibility = View.GONE;
+        aldatuRecord()
 
+    }
 
-            }
-        }
-    }*/
     fun aldatuRecord() {
         var rachaEncontrada = false
+
+        val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val userRegistrado = prefs.getString("userRegistrado", null)
 
         db.collection("users").get()
             .addOnSuccessListener { query ->
@@ -164,103 +187,42 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun hasiSaioa() {
-        var izenaAurkitua = false;
-        val input = EditText(this)
-
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Saioa Hasi")
-            .setView(input)
-            .setPositiveButton("Onartu") { _, _ ->
-                val nuevoNombre = input.text.toString().trim()
-                if (nuevoNombre.isNotEmpty()) {
-                    db.collection("users").get().addOnSuccessListener { documentSnapshots ->
-                        if (!documentSnapshots.isEmpty) {
-                            for (document in documentSnapshots.documents) {
-                                if (document.getString("nombre").equals(nuevoNombre.toLowerCase(
-                                        Locale.ROOT))) {
-                                    username.text = nuevoNombre
-                                    userRegistrado = nuevoNombre
-                                    aldatuRecord()
-                                    izenaAurkitua = true
-                                }
-                            }
-                            if (!izenaAurkitua) {
-                                val usuarioRegistered = hashMapOf(
-                                    "nombre" to nuevoNombre.toLowerCase(Locale.ROOT),
-                                    "pais" to paisCodigo,
-                                    "racha" to 0
-                                )
-
-                                userRegistrado = nuevoNombre;
-                                username.text = nuevoNombre
-                                db.collection("users").add(usuarioRegistered).addOnSuccessListener {
-                                    Toast.makeText(
-                                        this, "Erabiltzaile " + nuevoNombre + " erregistratua",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                }
-                                aldatuRecord()
-                            }
-
-                        }
-                    }
-                    Toast.makeText(this, "Saioa hasi da", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Ez duzu izenik jarri", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton("Ezeztatu") { dialogInterface, _ ->
-                dialogInterface.dismiss()
-            }
-            .create()
-
-        dialog.show()
+        val rankingIntent: Intent = Intent(this@MainActivity, LogInActivity::class.java)
+        startActivity(rankingIntent)
     }
 
 
 
 
-
-
     private fun mostrarNuevaBandera() {
-        // Lista de botones
         val botones = listOf(btnOpcion1, btnOpcion2, btnOpcion3)
 
-        // 🔹 Resetear color de fondo y habilitar
         botones.forEach { boton ->
-            boton.setBackgroundColor(getColor(R.color.white)) // color original
+            boton.setBackgroundColor(getColor(R.color.white))
             boton.isEnabled = true
         }
 
-        // Elegir una bandera correcta aleatoria
         banderaCorrecta = listaBanderas.random()
 
-        // Elegir otras 2 incorrectas
         val opciones = listaBanderas.shuffled().filter { it != banderaCorrecta }.take(2).toMutableList()
         opciones.add(banderaCorrecta)
         opciones.shuffle()
 
-        // Mostrar la bandera
         imageBandera.setImageResource(banderaCorrecta.imagenResId)
 
-        // Actualizar racha en pantalla
         tvRacha.text = "$racha"
 
-        // Asignar texto y click listeners
         botones.forEachIndexed { index, boton ->
             boton.text = opciones[index].nombre
             boton.setOnClickListener {
-                // Deshabilitar todos los botones temporalmente
                 botones.forEach { it.isEnabled = false }
 
                 if (opciones[index] == banderaCorrecta) {
-                    // Acertó
                     boton.setBackgroundColor(getColor(R.color.green))
                     racha++
                     tvRacha.text = "$racha"
 
                 } else {
-                    // Falló
                     boton.setBackgroundColor(getColor(R.color.red))
                     val correctoIndex = opciones.indexOf(banderaCorrecta)
                     botones[correctoIndex].setBackgroundColor(getColor(R.color.green))
@@ -285,13 +247,11 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
 
-                        // Reiniciamos la racha **dentro del listener de Firebase**
                         racha = 0
                         tvRacha.text = "$racha"
                     }
                 }
 
-                // Esperar un segundo antes de la siguiente bandera
                 boton.postDelayed({
                     mostrarNuevaBandera()
                 }, 1000)
