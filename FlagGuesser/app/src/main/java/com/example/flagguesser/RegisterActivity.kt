@@ -43,7 +43,6 @@ class RegisterActivity: AppCompatActivity() {
     private fun erregistratu(){
 
         if(!username.text.isEmpty() || !contraseña.text.isEmpty() || !contraseñaRep.text.isEmpty()){
-            Toast.makeText(this, "${contraseña.text} + ${contraseñaRep.text}", Toast.LENGTH_SHORT).show()
 
             if(contraseña.text.toString() == contraseñaRep.text.toString()) {
                 db.collection("users").get().addOnSuccessListener { queryDocumentSnapshots ->
@@ -57,7 +56,8 @@ class RegisterActivity: AppCompatActivity() {
                                 ) == true
                             ) {
                                 userExist = true
-                                errorea.text = "Erabiltzaile hori existitzen da"
+                                Toast.makeText(this, "Erabiltzaile hori existitzen da", Toast.LENGTH_SHORT).show()
+
                                 break
                             }
                         }
@@ -70,31 +70,38 @@ class RegisterActivity: AppCompatActivity() {
                             )
                             db.collection("users").add(erabiltzaileBerria)
                             val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-                            prefs.edit().putString("userRegistrado", username.text.toString())
-                                .apply()
+                            prefs.edit().putString("userRegistrado", username.text.toString()).apply()
                             val rankingIntent: Intent =
                                 Intent(this@RegisterActivity, MainActivity::class.java)
                             startActivity(rankingIntent)
+                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+
 
                         } else {
-                            errorea.text = "Kredentzial okerrak"
+                            Toast.makeText(this, "Kredentzial okerrak", Toast.LENGTH_SHORT).show()
+
                         }
                     }
                 }
             }else{
-                errorea.text = "Pasahitz berdina jarri"
+                Toast.makeText(this, "Pasahitz berdina jarri", Toast.LENGTH_SHORT).show()
+
             }
         }else{
-            errorea.text = "Datuak jarri"
+            Toast.makeText(this, "Datuak jarri", Toast.LENGTH_SHORT).show()
+
         }
 
     }
     private fun loginLink(){
         val intentLogin = Intent(this@RegisterActivity, LogInActivity::class.java)
         startActivity(intentLogin)
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_in_right)
+
     }
     private fun atzera(){
         val intentAtzera = Intent(this@RegisterActivity, MainActivity::class.java)
         startActivity(intentAtzera)
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
     }
 }

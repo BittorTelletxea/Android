@@ -1,6 +1,7 @@
 package com.example.flagguesser
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import java.util.Locale
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 
 class MainActivity : AppCompatActivity() {
@@ -192,8 +194,25 @@ class MainActivity : AppCompatActivity() {
     private fun hasiSaioa() {
         val rankingIntent: Intent = Intent(this@MainActivity, LogInActivity::class.java)
         startActivity(rankingIntent)
+        overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down)
     }
 
+    private fun mostrarTop10Popup(posicion: Int) {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_top10)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val tvMensaje = dialog.findViewById<TextView>(R.id.tvMensaje)
+        val btnAceptar = dialog.findViewById<Button>(R.id.btnAceptar)
+
+        tvMensaje.text = "Zure record-a $posicion. postuan sartu da munduko Top 10ean!"
+
+        btnAceptar.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
 
 
 
@@ -224,40 +243,53 @@ class MainActivity : AppCompatActivity() {
                     boton.setBackgroundColor(getColor(R.color.green))
                     racha++
                     tvRacha.text = "$racha"
-
                 } else {
                     boton.setBackgroundColor(getColor(R.color.red))
                     val correctoIndex = opciones.indexOf(banderaCorrecta)
                     botones[correctoIndex].setBackgroundColor(getColor(R.color.green))
 
-                    val usuario = db.collection("users")
-                    usuario.get().addOnSuccessListener { query ->
+                    if (!userRegistrado.isNullOrBlank()) {
+                        val usuario = db.collection("users")
+                        usuario.get().addOnSuccessListener { query ->
+                            for (document in query.documents) {
+                                if (document.getString("nombre") == userRegistrado) {
+                                    val rachaUserDB = (document.get("racha") as? Number)?.toInt() ?: 0
 
-                        if(!query.isEmpty){
-
-                            for(document in query.documents){
-                                if(document.getString("nombre").equals(userRegistrado)){
-
-                                    val rachaUser = (document.get("racha") as? Number)?.toInt() ?: 0
-
-                                        if(rachaUser < racha){
-                                            db.collection("users").document(document.id).update("racha", racha).addOnSuccessListener {
-                                                Toast.makeText(
-                                                    this,
-                                                    "Record eguneratua",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                aldatuRecord()
+                                    if (racha > rachaUserDB) {
+                                        db.collection("users").document(document.id).update("racha", racha)
+                                            .addOnSuccessListener {
+                                                db.collection("users")
+                                                    .orderBy("racha", Query.Direction.DESCENDING)
+                                                    .limit(10)
+                                                    .get()
+                                                    .addOnSuccessListener { querys ->
+                                                        var posicion = 0;
+                                                        for(document in querys.documents){
+                                                            posicion++
+                                                            if(document.getString("nombre") == userRegistrado){
+                                                                mostrarTop10Popup(posicion)
+                                                                break
+                                                            }
+                                                        }
+                                                        racha = 0
+                                                        tvRacha.text = "$racha"
+                                                        aldatuRecord()
+                                                    }
                                             }
+                                    } else {
+                                        racha = 0
+                                        tvRacha.text = "$racha"
                                     }
+                                    break
                                 }
                             }
                         }
-
+                    } else {
                         racha = 0
                         tvRacha.text = "$racha"
                     }
                 }
+
 
                 boton.postDelayed({
                     mostrarNuevaBandera()
@@ -269,6 +301,7 @@ class MainActivity : AppCompatActivity() {
     private fun cambiarRanking(){
         val rankingIntent: Intent = Intent(this@MainActivity, RankingActivity::class.java)
         startActivity(rankingIntent)
+
     }
 
 

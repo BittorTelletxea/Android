@@ -53,22 +53,28 @@ class LogInActivity: AppCompatActivity() {
                     if(userExist){
                         val rankingIntent: Intent = Intent(this@LogInActivity, MainActivity::class.java)
                         startActivity(rankingIntent)
+                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+
                     }else{
-                        errorea.text= "Kredentzial okerrak"
+                        Toast.makeText(this, "Kredentzial okerrak", Toast.LENGTH_SHORT)
                     }
                 }
             }
         }else{
-            errorea.text = "Datuak jarri"
+            Toast.makeText(this, "Datuak jarri", Toast.LENGTH_SHORT)
+
         }
 
     }
     private fun registerLink(){
         val intentLogin = Intent(this@LogInActivity, RegisterActivity::class.java)
         startActivity(intentLogin)
+
     }
     private fun atzera(){
         val intentAtzera = Intent(this@LogInActivity, MainActivity::class.java)
         startActivity(intentAtzera)
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+
     }
 }

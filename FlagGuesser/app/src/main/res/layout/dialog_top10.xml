@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/bg_dialog"
+    android:gravity="center">
+
+
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zorionak! 🎉"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/tvMensaje"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zure racha 1. postuan sartu da Top 10ean!"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/btnAceptar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Onartu"
+        android:backgroundTint="@color/beige"
+        android:textColor="@color/black"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>
