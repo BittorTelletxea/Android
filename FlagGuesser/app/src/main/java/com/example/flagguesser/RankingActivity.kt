@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Locale
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import org.w3c.dom.Text
 
 
@@ -25,6 +26,7 @@ class RankingActivity : AppCompatActivity() {
     private lateinit var logutImg: ImageView
     private lateinit var topGlText: TextView
     private lateinit var topPsText: TextView
+    private lateinit var tvPosicionUsuario: TextView
 
 
 
@@ -33,7 +35,7 @@ class RankingActivity : AppCompatActivity() {
         setContentView(R.layout.ranking_activity)
 
         val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-        val userRegistrado = prefs.getString("userRegistrado", null)
+        userRegistrado = prefs.getString("userRegistrado", null)
 
         playBtn = findViewById(R.id.btn_jugar)
         username = findViewById(R.id.username)
@@ -43,6 +45,7 @@ class RankingActivity : AppCompatActivity() {
         logutImg = findViewById(R.id.logoutImage)
         topGlText = findViewById(R.id.topGlText)
         topPsText = findViewById(R.id.topPsText)
+        tvPosicionUsuario = findViewById(R.id.tvPosicionUsuario)
 
         if (userRegistrado != null) {
             username.text = userRegistrado
@@ -72,6 +75,7 @@ class RankingActivity : AppCompatActivity() {
         añadirRecords()
         topPsText.setOnClickListener { añadirRecordsNacional() }
         topGlText.setOnClickListener { añadirRecords() }
+
 
     }
     private fun logout(){
@@ -103,21 +107,18 @@ class RankingActivity : AppCompatActivity() {
                 var posicion = 1
 
                 for (document in querySnapshot.documents) {
-                    val rachaUser = (document.get("racha") as? Number)?.toInt() ?: 0
+                    val nombre = document.getString("nombre") ?: "Sin nombre"
+                    val pais = document.getString("pais") ?: "Desconocido"
+                    val racha = (document.get("racha") as? Number)?.toInt() ?: 0
 
-                    if(rachaUser != 0) {
-                        val nombre = document.getString("nombre") ?: "Sin nombre"
-                        val pais = document.getString("pais") ?: "Desconocido"
-                        val racha = (document.get("racha") as? Number)?.toInt() ?: 0
-
-                        listaStringsNombre.add("$posicion. $nombre")
-                        listaStringsPais.add(pais)
-                        listaStringsRacha.add(racha.toString())
+                    listaStringsNombre.add("$posicion. $nombre")
+                    listaStringsPais.add(pais)
+                    listaStringsRacha.add(racha.toString())
 
 
+                    posicion++
 
-                        posicion++
-                    }
+
                 }
 
                 val adapterNombre = ArrayAdapter(this, R.layout.item_lista, listaStringsNombre)
@@ -134,11 +135,24 @@ class RankingActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error al obtener usuarios: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+        var puesto = 0
+        db.collection("users")
+            .orderBy("racha", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { queryDocumentSnapshots ->
+                for(document in queryDocumentSnapshots.documents){
+                        puesto++
+                        if (document.getString("nombre").equals(userRegistrado)) {
+                            tvPosicionUsuario.text = "Zure postua: ${puesto}"
+                            break
+                    }
+                }
+            }
+
     }
     private fun añadirRecordsNacional() {
-        var posicionUser = 0
         db.collection("users")
-            .orderBy("racha", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .orderBy("racha", Query.Direction.DESCENDING)
             .limit(10)
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -180,7 +194,24 @@ class RankingActivity : AppCompatActivity() {
                 topPsText.setTextColor(getColor(R.color.black))
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Error al obtener usuarios: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error al obtener usuarios: ${e.message}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        var puesto = 0
+        db.collection("users")
+            .orderBy("racha", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { queryDocumentSnapshots ->
+                for(document in queryDocumentSnapshots.documents){
+                    if(document.getString("pais").equals(paisCodigo)) {
+
+                        puesto++
+                        if (document.getString("nombre").equals(userRegistrado)) {
+                            tvPosicionUsuario.text = "Zure postua: ${puesto}"
+                            break
+                        }
+                    }
+                }
             }
     }
 

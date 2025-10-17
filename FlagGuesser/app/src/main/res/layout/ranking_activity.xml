@@ -71,7 +71,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="360dp"
-            android:layout_height="560dp"
+            android:layout_height="600dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true"
@@ -172,7 +172,7 @@
                 <!-- Listado de rachas -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="420dp"
                     android:padding="15dp"
 
                     android:orientation="horizontal">
@@ -210,20 +210,28 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
 
+                    <TextView
+                        android:id="@+id/tvPosicionUsuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Zure postua: -"
+                        android:textAlignment="center"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:padding="12dp"
+                        android:textColor="@color/black"
+                        android:background="@color/beige"/>
+
+                </LinearLayout>
 
             </LinearLayout>
-            <TextView
-                android:id="@+id/tvPosicionUsuario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Zure postua: -"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:padding="12dp"
-                android:textColor="@color/black"
-                android:background="@color/beige"/>
+
+
         </androidx.cardview.widget.CardView>
 
 
