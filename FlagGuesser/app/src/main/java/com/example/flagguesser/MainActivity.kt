@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     val listaBanderas = BanderasData.lista
 
     private lateinit var tvRacha: TextView
-    private var racha: Int = 0 // Contador de racha
+    private var racha: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -129,6 +129,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+
     }
     private fun hasiSaioa() {
         val rankingIntent: Intent = Intent(this@MainActivity, LogInActivity::class.java)
@@ -223,6 +224,7 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                         }
+
                     } else {
                         racha = 0
                         tvRacha.text = "$racha"
