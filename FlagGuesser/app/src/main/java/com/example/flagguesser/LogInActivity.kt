@@ -56,12 +56,12 @@ class LogInActivity: AppCompatActivity() {
                         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
 
                     }else{
-                        Toast.makeText(this, "Kredentzial okerrak", Toast.LENGTH_SHORT)
+                        Toast.makeText(this, "Kredentzial okerrak", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }else{
-            Toast.makeText(this, "Datuak jarri", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "Datuak jarri", Toast.LENGTH_SHORT).show()
 
         }
 
