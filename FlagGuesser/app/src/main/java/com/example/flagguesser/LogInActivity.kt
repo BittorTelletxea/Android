@@ -42,7 +42,7 @@ class LogInActivity: AppCompatActivity() {
                     for (document in queryDocumentSnapshots.documents) {
                         val usuarioRecorrido = document.getString("nombre")
                         val contraseñaRecorrido = document.getString("contraseña")
-                        if (usuarioRecorrido?.equals(username.text.toString(), ignoreCase = true) == true &&
+                        if (usuarioRecorrido?.equals(username.text.toString()) == true &&
                             contraseñaRecorrido?.equals(contraseña.text.toString()) == true) {
                             userExist = true
                             val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
