@@ -21,11 +21,9 @@ class RankingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inflar layout con binding
         binding = RankingActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Recuperar usuario registrado
         val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
         userRegistrado = prefs.getString("userRegistrado", null)
 
@@ -37,7 +35,6 @@ class RankingActivity : AppCompatActivity() {
             binding.logoutImage.visibility = View.GONE
         }
 
-        // Bandera del usuario
         val banderaResId = when (paisCodigo.uppercase()) {
             "ES" -> R.drawable.es
             "MX" -> R.drawable.mx
@@ -48,14 +45,12 @@ class RankingActivity : AppCompatActivity() {
         }
         binding.usuariobandera.setImageResource(banderaResId)
 
-        // Listeners
         binding.logoutImage.setOnClickListener { logout() }
         binding.username.setOnClickListener { hasiSaioa() }
         binding.btnJugar.setOnClickListener { cambiarPlay() }
         binding.topPsText.setOnClickListener { añadirRecordsNacional() }
         binding.topGlText.setOnClickListener { añadirRecords() }
 
-        // Cargar records
         añadirRecords()
     }
 
@@ -106,7 +101,6 @@ class RankingActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error al obtener usuarios: ${e.message}", Toast.LENGTH_SHORT).show()
             }
 
-        // Mostrar posición del usuario
         var puesto = 0
         db.collection("users")
             .orderBy("racha", Query.Direction.DESCENDING)
@@ -158,7 +152,6 @@ class RankingActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error al obtener usuarios: ${e.message}", Toast.LENGTH_SHORT).show()
             }
 
-        // Posición del usuario a nivel nacional
         var puesto = 0
         db.collection("users")
             .orderBy("racha", Query.Direction.DESCENDING)
