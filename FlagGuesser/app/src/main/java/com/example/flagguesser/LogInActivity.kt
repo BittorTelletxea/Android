@@ -2,79 +2,69 @@ package com.example.flagguesser
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.*
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import java.util.Locale
+import com.example.flagguesser.databinding.LogInActivityBinding
 import com.google.firebase.firestore.FirebaseFirestore
-class LogInActivity: AppCompatActivity() {
-    private val db = FirebaseFirestore.getInstance();
-    private lateinit var username: EditText
-    private lateinit var contraseña: EditText
-    private lateinit var loginBtn: Button
-    private lateinit var atzeraBtn: ImageView
 
-    private lateinit var erregistratuLink: TextView
-    private lateinit var errorea: TextView
+class LogInActivity : AppCompatActivity() {
+
+    private lateinit var binding: LogInActivityBinding
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.log_in_activity)
 
-        username = findViewById(R.id.username)
-        contraseña = findViewById(R.id.contraseña)
-        loginBtn = findViewById(R.id.btnLogin)
-        erregistratuLink = findViewById(R.id.erregitratuLink)
-        errorea = findViewById(R.id.errorea)
-        atzeraBtn = findViewById(R.id.atzeraBtn)
+        binding = LogInActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        loginBtn.setOnClickListener { hasiSaioa() }
-        erregistratuLink.setOnClickListener { registerLink() }
-        atzeraBtn.setOnClickListener { atzera() }
+        binding.btnLogin.setOnClickListener { hasiSaioa() }
+        binding.erregitratuLink.setOnClickListener { registerLink() }
+        binding.atzeraBtn.setOnClickListener { atzera() }
     }
-    private fun hasiSaioa(){
 
-        if(!username.text.isEmpty() || !contraseña.text.isEmpty()){
+    private fun hasiSaioa() {
+        val usuarioText = binding.username.text.toString()
+        val contraseñaText = binding.contraseA.text.toString()
+
+        if (usuarioText.isNotEmpty() && contraseñaText.isNotEmpty()) {
             db.collection("users").get().addOnSuccessListener { queryDocumentSnapshots ->
-                if(!queryDocumentSnapshots.isEmpty){
+                if (!queryDocumentSnapshots.isEmpty) {
                     var userExist = false
                     for (document in queryDocumentSnapshots.documents) {
                         val usuarioRecorrido = document.getString("nombre")
                         val contraseñaRecorrido = document.getString("contraseña")
-                        if (usuarioRecorrido?.equals(username.text.toString()) == true &&
-                            contraseñaRecorrido?.equals(contraseña.text.toString()) == true) {
+
+                        if (usuarioRecorrido == usuarioText && contraseñaRecorrido == contraseñaText) {
                             userExist = true
                             val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
                             prefs.edit().putString("userRegistrado", usuarioRecorrido).apply()
                             break
                         }
                     }
-                    if(userExist){
-                        val rankingIntent: Intent = Intent(this@LogInActivity, MainActivity::class.java)
-                        startActivity(rankingIntent)
-                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
 
-                    }else{
+                    if (userExist) {
+                        val intent = Intent(this@LogInActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+                    } else {
                         Toast.makeText(this, "Kredentzial okerrak", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-        }else{
+        } else {
             Toast.makeText(this, "Datuak jarri", Toast.LENGTH_SHORT).show()
-
         }
-
     }
-    private fun registerLink(){
-        val intentLogin = Intent(this@LogInActivity, RegisterActivity::class.java)
-        startActivity(intentLogin)
 
+    private fun registerLink() {
+        val intent = Intent(this@LogInActivity, RegisterActivity::class.java)
+        startActivity(intent)
     }
-    private fun atzera(){
-        val intentAtzera = Intent(this@LogInActivity, MainActivity::class.java)
-        startActivity(intentAtzera)
+
+    private fun atzera() {
+        val intent = Intent(this@LogInActivity, MainActivity::class.java)
+        startActivity(intent)
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
-
     }
 }

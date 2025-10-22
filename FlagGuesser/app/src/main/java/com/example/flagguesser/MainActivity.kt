@@ -1,6 +1,7 @@
 package com.example.flagguesser
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.view.View
 import android.widget.*
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.viewbinding.ViewBinding
+import com.example.flagguesser.databinding.ActivityMainBinding
 import java.util.Locale
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -16,63 +19,35 @@ import com.google.firebase.firestore.Query
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var imageBandera: ImageView
-    private lateinit var btnOpcion1: Button
-    private lateinit var btnOpcion2: Button
-    private lateinit var btnOpcion3: Button
-    private lateinit var rankingBtn: ImageView
+    private lateinit var binding: ActivityMainBinding
     private val paisCodigo = Locale.getDefault().country
-
-    private val db = FirebaseFirestore.getInstance();
-    private lateinit var username: TextView
+    private val db = FirebaseFirestore.getInstance()
     private var userRegistrado: String? = null
     private lateinit var banderaCorrecta: BanderaClass
-    private lateinit var recordRachaText: TextView
-    private lateinit var logutImg: ImageView
-
-    val listaBanderas = BanderasData.lista
-
-    private lateinit var tvRacha: TextView
+    private val listaBanderas = BanderasData.lista
     private var racha: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        imageBandera = findViewById(R.id.bandera)
-        btnOpcion1 = findViewById(R.id.opcion1)
-        btnOpcion2 = findViewById(R.id.opcion2)
-        btnOpcion3 = findViewById(R.id.opcion3)
-        tvRacha = findViewById(R.id.tvRacha)
-        username = findViewById(R.id.username)
-        rankingBtn = findViewById(R.id.btn_ranking)
-        recordRachaText = findViewById(R.id.text_view_record)
-        logutImg = findViewById(R.id.logoutImage)
-
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
         userRegistrado = prefs.getString("userRegistrado", null)
 
         if (userRegistrado != null) {
-            username.text = userRegistrado
-            logutImg.visibility = View.VISIBLE;
-
+            binding.username.text = userRegistrado
+            binding.logoutImage.visibility = View.VISIBLE
         } else {
-            username.text = "Saioa Hasi"
-            logutImg.visibility = View.GONE;
-
+            binding.username.text = "Saioa Hasi"
+            binding.logoutImage.visibility = View.GONE
         }
 
-        rankingBtn.setOnClickListener { cambiarRanking() }
+        binding.btnRanking.setOnClickListener { cambiarRanking() }
+        binding.username.setOnClickListener { hasiSaioa() }
+        binding.logoutImage.setOnClickListener { logout() }
 
-        username.setOnClickListener { hasiSaioa() }
-
-
-
-        //erabiltzailearen herrialdearen bandera jarri
         val banderaResId = when (paisCodigo.uppercase()) {
             "ES" -> R.drawable.es
             "MX" -> R.drawable.mx
@@ -81,29 +56,23 @@ class MainActivity : AppCompatActivity() {
             "FR" -> R.drawable.fr
             else -> R.drawable.bw
         }
-
-        val imgUserFlag = findViewById<ImageView>(R.id.usuariobandera)
-        imgUserFlag.setImageResource(banderaResId)
-
-        logutImg.setOnClickListener { logout() }
+        binding.usuariobandera.setImageResource(banderaResId)
 
         mostrarNuevaBandera()
         aldatuRecord()
     }
 
-    private fun logout(){
+    private fun logout() {
         val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
         prefs.edit().remove("userRegistrado").apply()
         userRegistrado = null
-        username.text = "Saioa Hasi"
-        logutImg.visibility = View.GONE;
+        binding.username.text = "Saioa Hasi"
+        binding.logoutImage.visibility = View.GONE
         aldatuRecord()
-
     }
 
     fun aldatuRecord() {
         var rachaEncontrada = false
-
         val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
         val userRegistrado = prefs.getString("userRegistrado", null)
 
@@ -111,30 +80,28 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { query ->
                 if (!query.isEmpty) {
                     for (document in query.documents) {
-
-                        if (!userRegistrado.isNullOrBlank() ) {
-                            if (document.getString("nombre").equals(userRegistrado)) {
+                        if (!userRegistrado.isNullOrBlank()) {
+                            if (document.getString("nombre") == userRegistrado) {
                                 val rachaUser = (document.get("racha") as? Number)?.toInt() ?: 0
-                                recordRachaText.text = "$rachaUser"
+                                binding.textViewRecord.text = "$rachaUser"
                                 rachaEncontrada = true
                                 break
                             }
                         } else {
-                            recordRachaText.text = "Saioa hasi"
+                            binding.textViewRecord.text = "Saioa hasi"
                         }
                     }
                     if (!rachaEncontrada) {
-                        recordRachaText.text = "Saioa hasi"
+                        binding.textViewRecord.text = "Saioa hasi"
                     }
                 }
             }
-
-
     }
+
     private fun hasiSaioa() {
-        val rankingIntent: Intent = Intent(this@MainActivity, LogInActivity::class.java)
+        val rankingIntent = Intent(this@MainActivity, LogInActivity::class.java)
         startActivity(rankingIntent)
-        overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down)
+        overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down)
     }
 
     private fun mostrarTop10Popup(posicion: Int) {
@@ -146,18 +113,12 @@ class MainActivity : AppCompatActivity() {
         val btnAceptar = dialog.findViewById<Button>(R.id.btnAceptar)
 
         tvMensaje.text = "Zure record-a $posicion. postuan sartu da munduko Top 10ean!"
-
-        btnAceptar.setOnClickListener {
-            dialog.dismiss()
-        }
-
+        btnAceptar.setOnClickListener { dialog.dismiss() }
         dialog.show()
     }
 
-
-
     private fun mostrarNuevaBandera() {
-        val botones = listOf(btnOpcion1, btnOpcion2, btnOpcion3)
+        val botones = listOf(binding.opcion1, binding.opcion2, binding.opcion3)
 
         botones.forEach { boton ->
             boton.setBackgroundColor(getColor(R.color.white))
@@ -165,14 +126,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         banderaCorrecta = listaBanderas.random()
-
         val opciones = listaBanderas.shuffled().filter { it != banderaCorrecta }.take(2).toMutableList()
         opciones.add(banderaCorrecta)
         opciones.shuffle()
 
-        imageBandera.setImageResource(banderaCorrecta.imagenResId)
-
-        tvRacha.text = "$racha"
+        binding.bandera.setImageResource(banderaCorrecta.imagenResId)
+        binding.tvRacha.text = "$racha"
 
         botones.forEachIndexed { index, boton ->
             boton.text = opciones[index].nombre
@@ -182,15 +141,14 @@ class MainActivity : AppCompatActivity() {
                 if (opciones[index] == banderaCorrecta) {
                     boton.setBackgroundColor(getColor(R.color.green))
                     racha++
-                    tvRacha.text = "$racha"
+                    binding.tvRacha.text = "$racha"
                 } else {
                     boton.setBackgroundColor(getColor(R.color.red))
                     val correctoIndex = opciones.indexOf(banderaCorrecta)
                     botones[correctoIndex].setBackgroundColor(getColor(R.color.green))
 
                     if (!userRegistrado.isNullOrBlank()) {
-                        val usuario = db.collection("users")
-                        usuario.get().addOnSuccessListener { query ->
+                        db.collection("users").get().addOnSuccessListener { query ->
                             for (document in query.documents) {
                                 if (document.getString("nombre") == userRegistrado) {
                                     val rachaUserDB = (document.get("racha") as? Number)?.toInt() ?: 0
@@ -203,48 +161,40 @@ class MainActivity : AppCompatActivity() {
                                                     .limit(10)
                                                     .get()
                                                     .addOnSuccessListener { querys ->
-                                                        var posicion = 0;
-                                                        for(document in querys.documents){
+                                                        var posicion = 0
+                                                        for (doc in querys.documents) {
                                                             posicion++
-                                                            if(document.getString("nombre") == userRegistrado){
+                                                            if (doc.getString("nombre") == userRegistrado) {
                                                                 mostrarTop10Popup(posicion)
                                                                 break
                                                             }
                                                         }
                                                         racha = 0
-                                                        tvRacha.text = "$racha"
+                                                        binding.tvRacha.text = "$racha"
                                                         aldatuRecord()
                                                     }
                                             }
                                     } else {
                                         racha = 0
-                                        tvRacha.text = "$racha"
+                                        binding.tvRacha.text = "$racha"
                                     }
                                     break
                                 }
                             }
                         }
-
                     } else {
                         racha = 0
-                        tvRacha.text = "$racha"
+                        binding.tvRacha.text = "$racha"
                     }
                 }
 
-
-                boton.postDelayed({
-                    mostrarNuevaBandera()
-                }, 1000)
+                boton.postDelayed({ mostrarNuevaBandera() }, 1000)
             }
         }
     }
 
-    private fun cambiarRanking(){
-        val rankingIntent: Intent = Intent(this@MainActivity, RankingActivity::class.java)
+    private fun cambiarRanking() {
+        val rankingIntent = Intent(this@MainActivity, RankingActivity::class.java)
         startActivity(rankingIntent)
-
     }
-
-
 }
-
